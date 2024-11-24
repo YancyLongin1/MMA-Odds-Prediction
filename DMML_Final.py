@@ -1,28 +1,11 @@
 #!/usr/bin/env python
-# coding: utf-8
-
-# In[7]:
-
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from sklearn.feature_extraction import text
-from nltk.stem import PorterStemmer
-import nltk
 
-
-# In[8]:
-
-
-df = pd.read_csv("/Users/yancylongin/Desktop/pROEJCT/UFC/data.csv")
+df = pd.read_csv("data.csv")
 df.dropna()
-
-
-# In[9]:
-
 
 columns_to_display = ['date', 'R_odds', 'B_odds', 'Winner', 'weight_class']
 
@@ -50,31 +33,15 @@ df_selected = df_selected[['year', 'r_odds', 'b_odds', 'winner', 'weight_class',
 
 df_selected.head()
 
-
-# In[10]:
-
-
 df_selected.info()
-
-
-# In[11]:
-
 
 total_underdog_wins = df_selected['underdog_win'].sum()
 
 
 print("Total number of underdog wins:", total_underdog_wins)
 
-
-# In[12]:
-
-
 df_sorted = df_selected.sort_values(by='r_odds')
 df_sorted
-
-
-# In[13]:
-
 
 sns.set_theme(style="whitegrid")
 
@@ -94,10 +61,6 @@ axes[1].set_ylabel('Frequency')
 plt.tight_layout()
 plt.show()
 
-
-# In[14]:
-
-
 # Win Frequency - Bar Charts
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
@@ -116,10 +79,6 @@ axes[1].set_ylabel('Count')
 plt.tight_layout()
 plt.show()
 
-
-# In[15]:
-
-
 # Odds vs. Outcome - Scatter Plot
 plt.figure(figsize=(10, 6))
 sns.scatterplot(x='r_odds', y='b_odds', hue='winner', data=df_selected, palette='Set2')
@@ -129,10 +88,6 @@ plt.ylabel('Blue Odds')
 plt.legend(title='Winner')
 plt.grid(True)
 plt.show()
-
-
-# In[16]:
-
 
 # Odds vs. Outcome - Box Plots
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
@@ -149,10 +104,6 @@ axes[1].set_ylabel('Blue Odds')
 
 plt.tight_layout()
 plt.show()
-
-
-# In[17]:
-
 
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
@@ -215,10 +166,6 @@ plt.title('ROC Curve')
 plt.legend(loc="lower right")
 plt.show()
 
-
-# In[ ]:
-
-
 from sklearn.model_selection import GridSearchCV
 
 # Decision Tree Hyperparameter Tuning
@@ -245,10 +192,6 @@ lr_grid = GridSearchCV(lr, lr_params, cv=5, scoring='accuracy')
 lr_grid.fit(X_train, y_train)
 y_pred_lr = lr_grid.best_estimator_.predict(X_test)
 
-
-# In[ ]:
-
-
 # Evaluate the models
 models = {'Decision Tree': y_pred_dt, 'Random Forest': y_pred_rf, 'Gradient Boosting': y_pred_gb, 'Logistic Regression': y_pred_lr}
 for model_name, y_pred in models.items():
@@ -274,16 +217,6 @@ plt.title('ROC Curve')
 plt.legend(loc="lower right")
 plt.show()
 
-
-# In[ ]:
-
-
-
-
-
-# In[24]:
-
-
 # Feature Importance for Random Forest
 importances = rf.feature_importances_
 indices = np.argsort(importances)[::-1]
@@ -295,10 +228,6 @@ plt.bar(range(X.shape[1]), importances[indices], align="center")
 plt.xticks(range(X.shape[1]), feature_names[indices], rotation=90)
 plt.tight_layout()
 plt.show()
-
-
-# In[21]:
-
 
 from sklearn.metrics import confusion_matrix, classification_report, roc_auc_score
 
